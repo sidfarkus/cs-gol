@@ -1,0 +1,14 @@
+version: 1.0
+shards:
+  gl:
+    github: doughsay/crystal-gl
+    version: 0.0.1
+
+  glfw:
+    github: jellymann/crystal_glfw
+    version: 0.1.1
+
+  lib_glfw3:
+    github: jellymann/crystal_lib_glfw3
+    version: 0.1.0
+

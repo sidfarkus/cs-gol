@@ -1,0 +1,19 @@
+name: crystal-gol
+version: 0.1.0
+
+authors:
+  - Ron Warholic <ronwarholic@learnzillion.com>
+
+targets:
+  crystal-gol:
+    main: src/crystal-gol.cr
+
+crystal: 0.23.1
+
+license: MIT
+
+dependencies:
+  glfw:
+    github: jellymann/crystal_glfw
+  gl:
+    github: doughsay/crystal-gl
