@@ -2,6 +2,7 @@ require "../spec_helper"
 
 matrix(1, 2, Int32)
 matrix(2, 1, Int32)
+matrix(1, 1, Int32)
 
 describe "matrix" do
   it "generates a Matrix class of appropriate dims" do
@@ -22,18 +23,22 @@ describe "matrix" do
     m[1].should eq(3)
   end
 
+  it "generates a zeros class method" do
+    m = Matrix2x1.zeros
+    m.should eq(Matrix2x1.new(0, 0))
+  end
+
   it "generates a transpose function that can transpose the array" do
     m = Matrix1x2.new(2, 3)
     m.transpose.should eq(Matrix2x1.new(2, 3))
 
     m = Matrix3.new((0...9).map(&.to_f32))
     m.transpose.should eq(Matrix3.new([0, 3, 6, 1, 4, 7, 2, 5, 8].map(&.to_f32)))
-    puts m
   end
 
   it "generates an exception for transpose! when provided a non-square matrix" do
     m = Matrix2x1.new(1, 2)
-    expect_raises do 
+    expect_raises(Exception) do 
       m.transpose!
     end
   end

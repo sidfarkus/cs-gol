@@ -11,10 +11,24 @@ macro matrix(rows, cols, kind)
     end
 
     def self.zeros
-      Matrix{{rows}}x{{cols}}.new([
+      self.new([
         {% for row in 0...rows %}
         {% for col in 0...cols %}
         {{kind}}.new(0),
+        {% end %}
+        {% end %}
+      ])
+    end
+
+    def self.identity
+      self.new([
+        {% for row in 0...rows %}
+        {% for col in 0...cols %}
+        {% if row == col %}
+        {{kind}}.new(1),
+        {% else %}
+        {{kind}}.new(0),
+        {% end %}
         {% end %}
         {% end %}
       ])
@@ -42,13 +56,32 @@ macro matrix(rows, cols, kind)
       @data[row * {{cols}} + col]
     end
 
+    def []=(row, col, val : {{kind}})
+      @data[row * {{cols}} + col] = val
+    end
+
     def rows
-      @data.each_slice(row_count, true)
+      [
+      {% for row in 0...rows %}[
+      {% for col in 0...cols %}
+      @data[{{row * cols + col}}],
+      {% end %}],
+      {% end %}
+      ]
+    end
+
+    def each_row
+      @data.each_slice({{cols}})
     end
 
     def cols
-      (0..col_count).each do |col|
-      end
+      [
+      {% for col in 0...cols %}[
+      {% for row in 0...rows %}
+      @data[{{row * cols + col}}],
+      {% end %}],
+      {% end %}
+      ]
     end
 
     def transpose
@@ -75,10 +108,10 @@ macro matrix(rows, cols, kind)
 
     def *(other)
       raise Exception.new if other.col_count != row_count
-      output = Matrix{{rows}}x{{rows}}.zeros
-      {% for row in 0...rows %}
-      {% for col in 0...rows %}
-      output[{{row}}, {{col}}] = other.cols[{{col}}].zip(rows[{{row}}]).map {|a, b| a * b}.reduce(&:+)
+      output = Matrix{{cols}}x{{cols}}.zeros
+      {% for row in 0...cols %}
+      {% for col in 0...cols %}
+      output[{{row}}, {{col}}] = rows[{{col}}].zip(other.cols[{{row}}]).map {|a, b| a * b}.reduce(&.+)
       {% end %}
       {% end %}
       output     

@@ -13,7 +13,7 @@ crystal: 0.23.1
 license: MIT
 
 dependencies:
-  glfw:
-    github: jellymann/crystal_glfw
+  crystglfw:
+    github: calebuharrison/CrystGLFW
   gl:
     github: doughsay/crystal-gl
