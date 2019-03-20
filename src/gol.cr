@@ -1,27 +1,28 @@
-require "crystglfw"
-require "gl"
+require "glfw"
 
 require "./*"
 require "./rendering/*"
 require "./geometry/*"
 
-GL.clear_color(0.3, 0.65, 0.8, 1.0)
 
+include CrystGLFW
+
+# Initialize GLFW
 CrystGLFW.run do
-  window = CrystGLFW::Window.new(title: "Game of Life", width: 1024, height: 600)
+  # Create a new window.
+  window = Window.new(title: "My First Window")
 
+  # Configure the window to print its dimensions each time it is resized.
   window.on_resize do |event|
     puts "Window resized to #{event.size}"
   end
 
+  # Make this window's OpenGL context the current drawing context.
   window.make_context_current
 
   until window.should_close?
     CrystGLFW.wait_events
-    GL.clear(GL::BufferBit::Color | GL::BufferBit::Depth)
-    
     window.swap_buffers
   end
-
-  window.destroy
-end
+end    
+   

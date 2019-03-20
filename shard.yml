@@ -8,12 +8,11 @@ targets:
   crystal-gol:
     main: src/crystal-gol.cr
 
-crystal: 0.23.1
+crystal: 0.24.2
 
 license: MIT
 
 dependencies:
   crystglfw:
     github: calebuharrison/CrystGLFW
-  gl:
-    github: doughsay/crystal-gl
+    branch: master
