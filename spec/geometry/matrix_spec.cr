@@ -31,6 +31,13 @@ describe "matrix" do
     m.should eq(Matrix2x1.new(0, 0))
   end
 
+  it "generates an identity class method" do
+    m = Matrix3.identity
+    m.should eq(Matrix3.new(1.0, 0.0, 0.0,
+                            0.0, 1.0, 0.0,
+                            0.0, 0.0, 1.0))
+  end
+
   it "generates a transpose function that can transpose the array" do
     m = Matrix1x2.new(2, 3)
     m.transpose.should eq(Matrix2x1.new(2, 3))
@@ -49,5 +56,13 @@ describe "matrix" do
   it "generates a multiplication function that multiplies a matrix" do
     a, b = Matrix2x1.new(4, 5), Matrix1x2.new(6, 3)
     (a * b).should eq(Matrix2x2.new(24, 12, 30, 15))
+
+    a, b = Matrix3.identity, Matrix3.new(2.0, 3.0, 4.0,
+                                         2.0, 3.0, 4.0,
+                                         2.0, 3.0, 4.0)
+    (a * b).should eq(b)
+  end
+
+  it "does not allow multiplication of matrices whose dimensions do not match" do
   end
 end

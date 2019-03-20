@@ -6,7 +6,7 @@ authors:
 
 targets:
   crystal-gol:
-    main: src/crystal-gol.cr
+    main: src/gol.cr
 
 crystal: 0.24.2
 

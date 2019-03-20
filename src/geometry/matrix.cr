@@ -111,7 +111,7 @@ macro matrix(rows, cols, kind)
       output = Matrix{{rows}}x{{rows}}.zeros
       {% for row in 0...rows %}
       {% for col in 0...rows %}
-      output[{{row}}, {{col}}] = rows[{{row}}].zip(other.cols[{{col}}]).map {|a, b| a * b}.reduce(&.+)
+      output[{{row}}, {{col}}] = rows[{{row}}].zip(other.cols[{{col}}]).map {|a, b| a * b }.reduce {|m, a| m + a }
       {% end %}
       {% end %}
       output
