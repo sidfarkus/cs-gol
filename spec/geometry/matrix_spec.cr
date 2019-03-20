@@ -38,6 +38,20 @@ describe "matrix" do
                             0.0, 0.0, 1.0))
   end
 
+  it "allows access to the matrix columns" do
+    m = Matrix3.new(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0)
+    m.cols.should eq([[1.0, 4.0, 7.0],
+                      [2.0, 5.0, 8.0],
+                      [3.0, 6.0, 9.0]])
+  end
+
+  it "allows access to the matrix rows" do
+    m = Matrix3.new(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0)
+    m.rows.should eq([[1.0, 2.0, 3.0],
+                      [4.0, 5.0, 6.0],
+                      [7.0, 8.0, 9.0]])
+  end
+
   it "generates a transpose function that can transpose the array" do
     m = Matrix1x2.new(2, 3)
     m.transpose.should eq(Matrix2x1.new(2, 3))
