@@ -1,3 +1,4 @@
+# A 3D vector class suitable for use with any numeric type
 struct Vector(T)
   property x, y, z
 
@@ -12,8 +13,26 @@ struct Vector(T)
     Math.sqrt(length_sq)
   end
 
+  def norm!
+    len = length
+    @x /= len
+    @y /= len
+    @z /= len
+    self
+  end
+
+  def norm
+    Vector(T).new(x, y, z).norm!
+  end
+
   def dot(other)
     x * other.x + y * other.y + z * other.z
+  end
+
+  def cross(other)
+    Vector(T).new(y * other.z - z * other.y,
+                  z * other.x - x * other.z,
+                  x * other.y - y * other.x)
   end
 
   def +(other)
@@ -23,13 +42,18 @@ struct Vector(T)
   def -(other)
     Vector(T).new(x - other.x, y - other.y, z - other.z)
   end
-  
+
   def *(other)
     Vector(T).new(x * other.x, y * other.y, z * other.z)
   end
 
   def -
     Vector(T).new(-x, -y, -z)
+  end
+
+  def close?(other, delta = 0)
+    delta_f = T.new(delta)
+    (x - other.x).abs <= delta_f && (y - other.y).abs <= delta_f && (z - other.z).abs <= delta_f
   end
 end
 

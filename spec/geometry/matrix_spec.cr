@@ -78,5 +78,9 @@ describe "matrix" do
   end
 
   it "does not allow multiplication of matrices whose dimensions do not match" do
+    a,b = Matrix3.zeros, Matrix1x2.zeros
+    expect_raises(Exception) do
+      a * b
+    end
   end
 end

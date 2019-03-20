@@ -123,11 +123,15 @@ macro matrix(rows, cols, kind)
     end
 
     def to_s
-      "{% for row in 0...rows %}[{% for col in 0...cols %}#{self[{{row}},{{col}}]}{% if col != cols - 1 %}, {% end %}{% end %}]\n{% end %}"
+      "{{rows}}x{{cols}} {% for row in 0...rows %}[{% for col in 0...cols %}#{self[{{row}},{{col}}]}{% if col != cols - 1 %}, {% end %}{% end %}]\n{% end %}"
     end
 
     def to_s(io)
       io << to_s
+    end
+
+    def inspect(io : IO)
+      to_s(io)
     end
   end
 end
