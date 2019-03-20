@@ -2,7 +2,10 @@ require "../spec_helper"
 
 matrix(1, 2, Int32)
 matrix(2, 1, Int32)
-matrix(1, 1, Int32)
+matrix(2, 2, Int32)
+matrix(3, 3, Float32)
+
+alias Matrix3 = Matrix3x3
 
 describe "matrix" do
   it "generates a Matrix class of appropriate dims" do
@@ -38,13 +41,13 @@ describe "matrix" do
 
   it "generates an exception for transpose! when provided a non-square matrix" do
     m = Matrix2x1.new(1, 2)
-    expect_raises(Exception) do 
+    expect_raises(Exception) do
       m.transpose!
     end
   end
 
   it "generates a multiplication function that multiplies a matrix" do
     a, b = Matrix2x1.new(4, 5), Matrix1x2.new(6, 3)
-    (a * b).should eq(Matrix1x1.new(39))
+    (a * b).should eq(Matrix2x2.new(24, 12, 30, 15))
   end
 end

@@ -108,13 +108,13 @@ macro matrix(rows, cols, kind)
 
     def *(other)
       raise Exception.new if other.col_count != row_count
-      output = Matrix{{cols}}x{{cols}}.zeros
-      {% for row in 0...cols %}
-      {% for col in 0...cols %}
-      output[{{row}}, {{col}}] = rows[{{col}}].zip(other.cols[{{row}}]).map {|a, b| a * b}.reduce(&.+)
+      output = Matrix{{rows}}x{{rows}}.zeros
+      {% for row in 0...rows %}
+      {% for col in 0...rows %}
+      output[{{row}}, {{col}}] = rows[{{row}}].zip(other.cols[{{col}}]).map {|a, b| a * b}.reduce(&.+)
       {% end %}
       {% end %}
-      output     
+      output
     end
 
     def ==(other)
@@ -131,11 +131,3 @@ macro matrix(rows, cols, kind)
     end
   end
 end
-
-matrix(2, 2, Float32)
-matrix(3, 3, Float32)
-matrix(4, 4, Float32)
-
-alias Matrix2 = Matrix2x2
-alias Matrix3 = Matrix3x3
-alias Matrix4 = Matrix4x4
