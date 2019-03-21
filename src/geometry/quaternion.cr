@@ -12,8 +12,15 @@ struct Quaternion(T)
       Math.sqrt(length_sq)
     end
 
-    def dot(other)
-      x * other.x + y * other.y + z * other.z
+    def norm!
+      len = length
+      @x /= len
+      @y /= len
+      @z /= len
+      @w /= len
+    end
+
+    def slerp(vec : VectorF)
     end
 
     def +(other)

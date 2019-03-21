@@ -63,9 +63,13 @@ struct Vector(T)
     Vector(T).new(-x, -y, -z)
   end
 
-  def close?(other, delta = 0)
+  def close?(other, delta = 0.001)
     delta_f = T.new(delta)
     (x - other.x).abs <= delta_f && (y - other.y).abs <= delta_f && (z - other.z).abs <= delta_f
+  end
+
+  def rotate(quaternion : Quaternion(T))
+
   end
 end
 

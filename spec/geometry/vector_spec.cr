@@ -11,6 +11,12 @@ describe "vector" do
     v.length.should be_close(4.1231, 0.0001)
   end
 
+  it "can be normalized" do
+    v = VectorF.new(10.0, 0.0, 0.0)
+    v.norm.length.should be_close(1.0, 0.0001)
+    v.norm.close?(VectorF.new(1.0, 0, 0)).should be_true
+  end
+
   it "supports dot product" do
     v1, v2 = VectorF.new(1.0, 2.0, 1.0), VectorF.new(1.0, 1.0, 3.0)
     v1.dot(v2).should be_close(6.0, 0.0001)
@@ -19,5 +25,10 @@ describe "vector" do
   it "supports cross product" do
     v1, v2 = VectorF.new(1.0, 2.0, 1.0), VectorF.new(1.0, 1.0, 3.0)
     v1.cross(v2).close?(VectorF.new(5.0, -2.0, -1.0)).should be_true
+  end
+
+  it "can be scaled by an arbitrary value" do
+    v = VectorF.new(1.0, 1.0, 1.0)
+    (v * 3.0).close?(VectorF.new(3.0, 3.0, 3.0)).should be_true
   end
 end
