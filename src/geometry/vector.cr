@@ -5,6 +5,10 @@ struct Vector(T)
   def initialize(@x : T, @y : T, @z : T)
   end
 
+  def to_a
+    [x, y, z]
+  end
+
   def length_sq
     x * x + y * y + z * z
   end
@@ -26,7 +30,7 @@ struct Vector(T)
   end
 
   def dot(other)
-    x * other.x + y * other.y + z * other.z
+    (self * other).to_a.sum
   end
 
   def cross(other)
@@ -36,7 +40,11 @@ struct Vector(T)
   end
 
   def +(other)
-    Vector(T).new(x + other.x, y + other.y, z + other.z)
+    if other.responds_to?(:x)
+      Vector(T).new(x + other.x, y + other.y, z + other.z)
+    else
+      Vector(T).new(x + other, y + other, z + other)
+    end
   end
 
   def -(other)
@@ -44,7 +52,11 @@ struct Vector(T)
   end
 
   def *(other)
-    Vector(T).new(x * other.x, y * other.y, z * other.z)
+    if other.responds_to?(:x)
+      Vector(T).new(x * other.x, y * other.y, z * other.z)
+    else
+      Vector(T).new(x * other, y * other, z * other)
+    end
   end
 
   def -
