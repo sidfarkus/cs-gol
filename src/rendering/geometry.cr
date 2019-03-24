@@ -1,4 +1,4 @@
-require "gl"
+require "lib_gl"
 
 class Geometry
   getter buffer, vertices

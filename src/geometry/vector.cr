@@ -48,7 +48,11 @@ struct Vector(T)
   end
 
   def -(other)
-    Vector(T).new(x - other.x, y - other.y, z - other.z)
+    if other.responds_to?(:x)
+      Vector(T).new(x - other.x, y - other.y, z - other.z)
+    else
+      Vector(T).new(x - other, y - other, z - other)
+    end
   end
 
   def *(other)
@@ -63,7 +67,7 @@ struct Vector(T)
     Vector(T).new(-x, -y, -z)
   end
 
-  def close?(other, delta = 0.001)
+  def close?(other : Vector(T), delta = 0.001)
     delta_f = T.new(delta)
     (x - other.x).abs <= delta_f && (y - other.y).abs <= delta_f && (z - other.z).abs <= delta_f
   end

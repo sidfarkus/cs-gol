@@ -1,4 +1,4 @@
-require "glfw"
+require "crystglfw"
 
 require "./*"
 require "./rendering/*"
@@ -24,5 +24,5 @@ CrystGLFW.run do
     CrystGLFW.wait_events
     window.swap_buffers
   end
-end    
-   
+end
+
