@@ -8,14 +8,11 @@ targets:
   crystal-gol:
     main: src/gol.cr
 
-crystal: 0.24.2
+crystal: 0.27.2
 
 license: MIT
 
 dependencies:
-  lib_gl:
-    github: calebuharrison/LibGL
-    branch: master
   lib_gl:
     github: calebuharrison/LibGL
     branch: master

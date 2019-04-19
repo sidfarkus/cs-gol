@@ -1,63 +1,84 @@
-abstract class Prop
-  property name, arg_types
+macro any_option
+  Number | Range(Number, Number) | String
+end
 
-  @@props = Hash(Symbol, Prop)
-
-  def initialize(@name : Symbol,
-                 @arg_types : Tuple(Value.class | Reference.class),
-                 @options : NamedTuple(Symbol, String))
+abstract class Producer(T)
+  def numeric_limits
+    {
+      "Int32" => (Int32::MIN..Int32::MAX),
+      "Int64" => (Int64::MIN..Int64::MAX),
+      "Float32" => (Float32::MIN / 2.0..Float32::MAX / 2.0),
+      "Float64" => (Float64::MIN / 2.0..Float64::MAX / 2.0)
+    }
   end
 
-  def self.props
-    @@props
-  end
+  abstract def produce(trial_num : Int32) : T
+end
 
-  def self.add(prop)
-    @@props[prop.name] = prop
+macro number_producer(number_type)
+  class {{number_type}}Producer < Producer({{number_type}})
+    def produce(trial_num, options)
+      if options[:range].is_a?(Range({{number_type}}, {{number_type}}))
+        Random.new.rand(options[:range])
+      else
+        Random.new.rand(numeric_limits[{{number_type.to_s}}])
+      end
+    end
   end
+end
 
-  abstract def example(*args, **kwargs)
+number_producer(Int32)
+number_producer(Int64)
+number_producer(Float32)
+number_producer(Float64)
+
+class StringProducer < Producer(String)
+  def produce(trial_num, options)
+    length = if options[:length].is_a?(Int32)
+      options[:length].as(Int32)
+    else
+      Random.new.rand((0..500))
+    end
+    String.new(Random.new.random_bytes(length))
+  end
 end
 
 macro prop(name, expression, *args)
-  class Prop_{{name}} < Prop
-    def initialize()
-      super(name: :{{name}},
-            arg_types: {{ args.select {|a| a.class_name == "TypeDeclaration"}.map(&.type) }},
-            {% if args.select {|a| a.class_name == "NamedTupleLiteral"}.size > 0 %}
-              options: {{ args.select {|a| a.class_name == "NamedTupleLiteral"}.map(&.double_splat) }}
-            {% end %})
-      Prop.add self
-    end
-
+  {% prop_name = "prop_#{name}".id %}
+  {% arg_types = args.select {|a| a.class_name == "TypeDeclaration"} %}
+  {% options = args.select {|a| a.class_name == "NamedTupleLiteral"}.map(&.double_splat) %}
+  
     # Run examples for generated input
-    def test(num_inputs = 100)
-      {% if true or env("QUICKCHECK") %}
+  {{prop_name}} = ->(num_inputs : Int32) {
+    {% if true or env("QUICKCHECK") %}
 
-      # Generate test cases for each argument
-      {% for arg in (0..args.size) %}
-        {% for other in (0..args.size) %}
-          {% if arg != other %}
-          begin
-            test_args = []
-            test_result = example(*test_args)
-          rescue e
-            test_result = e
-          end
-
-          {% end %}
-        {% end %}
-      {% end %}
-
-      {% end %}
-    end
-
-    def example({{ *args.select {|a| a.class_name == "TypeDeclaration"} }})
+    example = ->({{ *arg_types }}) {
       {{expression}}
+    }
+
+    # Generate test cases for each argument
+    arg_template = [
+      {% for arg in arg_types %}
+      {% if arg.type %}
+      {{arg.type}}Producer.new,
+      {% end %}
+    ]
+    for trial_num in (0..num_inputs)
+      trial_args = arg_template.map(&.produce(trial_num, {{options}}))
+      begin
+        result = {return_val: example(trial_args}
+      rescue
+        result = {return_val: false}
+      end
+
+      puts result
+      it "#{trial_num}: should exhibit property {{name}} with args #{trial_args}" do 
+        result.return_val.should be_true
+      end
     end
-  end
 
-  Prop_{{name}}.new
+    {% end %}
+  }
+
+  {{prop_name}}.call()
 end
-
-prop foo, x > 10, x : Int32

@@ -8,6 +8,8 @@ matrix(3, 3, Float32)
 alias Matrix3 = Matrix3x3
 
 describe "matrix" do
+  prop transpose_is_symmetric, m < 10, m : Matrix3
+
   it "generates a Matrix class of appropriate dims" do
     m = Matrix1x2.zeros
     m.row_count.should eq(1)
