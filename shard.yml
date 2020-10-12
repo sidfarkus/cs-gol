@@ -8,7 +8,7 @@ targets:
   crystal-gol:
     main: src/gol.cr
 
-crystal: 0.27.2
+crystal: 0.35.1
 
 license: MIT
 
