@@ -7,8 +7,16 @@ matrix(3, 3, Float32)
 
 alias Matrix3 = Matrix3x3
 
-describe "matrix" do
-  prop transpose_is_symmetric, m < 10, m : Matrix3
+class Matrix3Producer < Producer(Matrix3)
+  def produce(trial, options) : Matrix3
+    random = Random.new
+    Matrix3.new((0...9).map { |_| random.rand(numeric_limits["Float32"]).to_f32 })
+  end
+end
+
+describe "Matrix" do
+  prop transpose_is_symmetric, m.transpose.transpose == m, m : Matrix3
+  prop multiply_by_identity_is_original, m * Matrix3.identity == m, m : Matrix3
 
   it "generates a Matrix class of appropriate dims" do
     m = Matrix1x2.zeros
@@ -35,9 +43,10 @@ describe "matrix" do
 
   it "generates an identity class method" do
     m = Matrix3.identity
-    m.should eq(Matrix3.new(1.0, 0.0, 0.0,
-                            0.0, 1.0, 0.0,
-                            0.0, 0.0, 1.0))
+    m.should eq(
+      Matrix3.new(1.0, 0.0, 0.0,
+                  0.0, 1.0, 0.0,
+                  0.0, 0.0, 1.0))
   end
 
   it "allows access to the matrix columns" do
@@ -74,15 +83,8 @@ describe "matrix" do
     (a * b).should eq(Matrix2x2.new(24, 12, 30, 15))
 
     a, b = Matrix3.identity, Matrix3.new(2.0, 3.0, 4.0,
-                                         2.0, 3.0, 4.0,
-                                         2.0, 3.0, 4.0)
+             2.0, 3.0, 4.0,
+             2.0, 3.0, 4.0)
     (a * b).should eq(b)
-  end
-
-  it "does not allow multiplication of matrices whose dimensions do not match" do
-    a,b = Matrix3.zeros, Matrix1x2.zeros
-    expect_raises(Exception) do
-      a * b
-    end
   end
 end

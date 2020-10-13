@@ -35,6 +35,9 @@ macro matrix(rows, cols, kind)
     end
 
     def initialize(data : Array({{kind}}))
+      if data.size != {{rows * cols}}
+        raise Exception.new("Array data must match rank {{rows}} by {{cols}}!")
+      end
       @data = data
     end
 
@@ -106,7 +109,7 @@ macro matrix(rows, cols, kind)
       {{cols}}
     end
 
-    def *(other)
+    def *(other : Matrix{{cols}}x{{rows}})
       raise Exception.new if other.col_count != row_count
       output = Matrix{{rows}}x{{rows}}.zeros
       {% for row in 0...rows %}
@@ -116,6 +119,16 @@ macro matrix(rows, cols, kind)
       {% end %}
       output
     end
+
+    {% if rows == 3 && cols == 3 %}
+    def *(other : Vector({{kind}}))
+      Vector({{kind}}).new(
+        {% for row in 0...rows %}
+        @data[{{row * cols}}] * other.x + @data[{{row * cols + 1}}] * other.y + @data[{{row * cols + 1}}] * other.z,
+        {% end %}
+      )
+    end
+    {% end %}
 
     def ==(other)
       return false if other.col_count != col_count || other.row_count != row_count

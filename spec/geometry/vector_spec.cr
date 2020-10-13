@@ -1,5 +1,16 @@
 require "../spec_helper"
 
+class VectorFProducer < Producer(VectorF)
+  def produce(trial, options) : VectorF
+    random = Random.new
+    VectorF.new(
+      random.rand(numeric_limits["Float32"]).to_f32,
+      random.rand(numeric_limits["Float32"]).to_f32,
+      random.rand(numeric_limits["Float32"]).to_f32
+      )
+  end
+end
+
 describe "vector" do
   it "can calculate its squared length" do
     v = VectorF.new(1.0, 2.0, 3.0)

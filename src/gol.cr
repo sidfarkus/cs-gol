@@ -4,7 +4,6 @@ require "./*"
 require "./rendering/*"
 require "./geometry/*"
 
-
 include CrystGLFW
 
 # Initialize GLFW
@@ -25,4 +24,3 @@ CrystGLFW.run do
     window.swap_buffers
   end
 end
-

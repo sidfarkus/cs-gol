@@ -5,6 +5,10 @@ struct Vector(T)
   def initialize(@x : T, @y : T, @z : T)
   end
 
+  def initialize(data : Array(T))
+    @x, @y, @z = data
+  end
+
   def to_a
     [x, y, z]
   end
@@ -35,8 +39,8 @@ struct Vector(T)
 
   def cross(other)
     Vector(T).new(y * other.z - z * other.y,
-                  z * other.x - x * other.z,
-                  x * other.y - y * other.x)
+      z * other.x - x * other.z,
+      x * other.y - y * other.x)
   end
 
   def +(other)
@@ -73,7 +77,6 @@ struct Vector(T)
   end
 
   def rotate(quaternion : Quaternion(T))
-
   end
 end
 
