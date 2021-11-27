@@ -10,13 +10,14 @@ alias Matrix3 = Matrix3x3
 class Matrix3Producer < Producer(Matrix3)
   def produce(trial, options) : Matrix3
     random = Random.new
-    Matrix3.new((0...9).map { |_| random.rand(numeric_limits["Float32"]).to_f32 })
+    producer = Float32Producer.new
+    Matrix3.new((0...9).map { |_| producer.produce(trial, options) })
   end
 end
 
 describe "Matrix" do
-  prop transpose_is_symmetric, m.transpose.transpose == m, m : Matrix3
-  prop multiply_by_identity_is_original, m * Matrix3.identity == m, m : Matrix3
+  prop(:transpose_is_symmetric, m : Matrix3) {|m| m.transpose.transpose == m }
+  prop(:multiply_by_identity_is_original, m : Matrix3) {|m| m * Matrix3.identity == m }
 
   it "generates a Matrix class of appropriate dims" do
     m = Matrix1x2.zeros
