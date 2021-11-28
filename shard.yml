@@ -13,6 +13,6 @@ crystal: 0.35.1
 license: MIT
 
 dependencies:
-  lib_gl:
-    github: calebuharrison/LibGL
-    branch: master
+  crsfml:
+      github: oprypin/crsfml
+      version: ~> 2.5.2

@@ -1,6 +1,6 @@
-version: 1.0
+version: 2.0
 shards:
-  lib_gl:
-    github: calebuharrison/LibGL
-    commit: fed2ca7f6cd15efea94458b234c3ca5b0a8ffc5e
+  crsfml:
+    git: https://github.com/oprypin/crsfml.git
+    version: 2.5.2
 

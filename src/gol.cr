@@ -1,26 +1,32 @@
-require "crystglfw"
+require "crsfml"
 
 require "./*"
 require "./rendering/*"
 require "./geometry/*"
 
-include CrystGLFW
+FONT = SF::Font.from_file("#{__DIR__}/../resources/OpenSauceOne-Medium.otf")
 
-# Initialize GLFW
-CrystGLFW.run do
-  # Create a new window.
-  window = Window.new(title: "My First Window")
+window = SF::RenderWindow.new(
+  SF::VideoMode.new(1680, 1050), "Game of Life",
+  SF::Style::Titlebar | SF::Style::Close
+)
+window.vertical_sync_enabled = true
+text = SF::Text.new("the game of life", FONT, 42)
+text.position = {90, 70}
+text.color = SF::Color::Black
 
-  # Configure the window to print its dimensions each time it is resized.
-  window.on_resize do |event|
-    puts "Window resized to #{event.size}"
+clock = SF::Clock.new
+while window.open?
+  while event = window.poll_event
+    case event
+    when SF::Event::Closed
+      window.close
+    end
   end
 
-  # Make this window's OpenGL context the current drawing context.
-  window.make_context_current
+  window.clear SF::Color::White
 
-  until window.should_close?
-    CrystGLFW.wait_events
-    window.swap_buffers
-  end
+  window.draw text
+
+  window.display
 end
